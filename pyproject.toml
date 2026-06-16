@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "u1-boson-fermion"
+version = "0.1.0"
+description = "Utilities for U(1) boson and fermion quantum link model basis generation, conversion, plotting, and Hamiltonian construction."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+    "scipy",
+    "matplotlib",
+]
+
+[project.optional-dependencies]
+notebook = ["ipython", "jupyter"]
+dev = ["pytest"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
