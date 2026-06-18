@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+from typing import Sequence
+
 import numpy as np
+from numpy.typing import ArrayLike, NDArray
 
 
-def converter_b2f(bi: str, lx: int, ly: int, s: float):
+def converter_b2f(bi: str, lx: int, ly: int, s: float) -> tuple[NDArray[np.float64], NDArray[np.float64], NDArray[np.float64]]:
     """Convert a bitstring into matter, vertical-link, and horizontal-link arrays."""
     num = []
     links = []
@@ -35,7 +38,7 @@ def converter_b2f(bi: str, lx: int, ly: int, s: float):
     return num, ver, hor
 
 
-def converter_f2s(Type: str, Input, s: float):
+def converter_f2s(Type: str, Input: str | Sequence[ArrayLike], s: float) -> str:
     """Convert binary strings to toolkit strings, or array triples to bitstrings."""
     if Type == "binary2string":
         output = []
@@ -69,7 +72,7 @@ def converter_f2s(Type: str, Input, s: float):
     raise ValueError(f"Unknown Type: {Type}")
 
 
-def converter_full(bi: str, ly: int, lx: int):
+def converter_full(bi: str, ly: int, lx: int) -> tuple[NDArray[np.float64], NDArray[np.float64], NDArray[np.float64]]:
     """Spin-1/2 bitstring-to-array converter kept for notebook compatibility."""
     num = []
     links = []
@@ -95,7 +98,7 @@ def converter_full(bi: str, ly: int, lx: int):
     return num, ver, hor
 
 
-def converter_half(Type: str, Input, x: int, y: int):
+def converter_half(Type: str, Input: str | Sequence[ArrayLike], x: int, y: int) -> str:
     """Half-filled lattice converter from the original notebook."""
     if Type == "binary2string":
         output = []
@@ -122,7 +125,7 @@ def converter_half(Type: str, Input, x: int, y: int):
     raise ValueError(f"Unknown Type: {Type}")
 
 
-def inverse_converter_full(num, ver, hor) -> str:
+def inverse_converter_full(num: ArrayLike, ver: ArrayLike, hor: ArrayLike) -> str:
     """Reconstruct a spin-1/2 bitstring from matter, vertical, and horizontal arrays."""
     ly, lx = num.shape
     chars = []

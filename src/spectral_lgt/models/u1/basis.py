@@ -5,7 +5,18 @@ from __future__ import annotations
 from .dynamics import generate_all_reachable_configs
 
 
-def basis_generator(initial_state, Lx, Ly, m, g, ev, dynamics="both", S=1 / 2, pbc=False, progress=False):
+def basis_generator(
+    initial_state: str,
+    Lx: int,
+    Ly: int,
+    m: float,
+    g: float,
+    ev: float,
+    dynamics: str = "both",
+    S: float = 1 / 2,
+    pbc: bool = False,
+    progress: bool = False,
+) -> tuple[dict[str, list[int]], list[str]]:
     """Generate a basis dictionary and ordered state-name list."""
     basis = {}
     name_list = []

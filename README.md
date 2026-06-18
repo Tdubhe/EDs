@@ -1,12 +1,21 @@
-# U1-boson-fermion
+# spectral-lgt
 
-`U1-boson-fermion` is a small Python library extracted from `bf_scar.ipynb`. It provides helpers for:
+`spectral-lgt` is a small Python library for spectral lattice gauge theory workflows. It provides helpers for:
 
 - converting QLM bitstrings to lattice arrays and back
 - checking and applying plaquette and hopping moves
 - generating reachable Krylov bases
 - constructing sparse Hamiltonians
 - plotting lattice charge and fermion configurations
+- exact diagonalization and real-time dynamics
+
+Model-specific code lives under `spectral_lgt.models`. The current model is:
+
+- `spectral_lgt.models.u1`: U(1) quantum link model basis, converters, Hamiltonians, and plotting
+
+General spectral tools live at the package level:
+
+- `spectral_lgt.simulation`: exact diagonalization and time evolution
 
 ## Install
 
@@ -20,7 +29,7 @@ pip install -e .
 
 ```python
 import numpy as np
-from U1_boson_fermion import converter_f2s, basis_generator, ham
+from spectral_lgt import converter_f2s, basis_generator, ham
 
 Lx = Ly = 4
 num = np.array([

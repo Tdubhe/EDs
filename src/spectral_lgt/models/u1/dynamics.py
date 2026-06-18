@@ -3,21 +3,27 @@
 from __future__ import annotations
 
 from collections import deque
+from typing import Literal, Sequence
 
 import numpy as np
 
 from .converters import converter_b2f
 
+PlaquetteDirection = Literal["forward", "backward"]
+HoppingDirection = Literal["hop_up", "hop_down", "hop_left", "hop_right"]
+PlaquetteMove = tuple[int, list[int], PlaquetteDirection]
+HoppingMove = tuple[int, list[int], HoppingDirection]
 
-def plaquette_checker(bitstring: str, Lx: int, Ly: int, S: float, conserveenergy: bool, pbc: bool = False):
+
+def plaquette_checker(bitstring: str, Lx: int, Ly: int, S: float, conserveenergy: bool, pbc: bool = False) -> list[PlaquetteMove]:
     """Find plaquette actions available from a state."""
     max_m = int(2 * S)
     surviving_plaquettes = []
 
-    def site_index(x, y):
+    def site_index(x: int, y: int) -> int:
         return x * Ly + y
 
-    def bit_indices(x, y):
+    def bit_indices(x: int, y: int) -> tuple[int, int, int]:
         base = 3 * site_index(x, y)
         return base, base + 1, base + 2
 
@@ -72,7 +78,7 @@ def plaquette_checker(bitstring: str, Lx: int, Ly: int, S: float, conserveenergy
     return surviving_plaquettes
 
 
-def apply_plaquette_spinS_fast(state, indices, direction: str) -> str:
+def apply_plaquette_spinS_fast(state: str | Sequence[str], indices: Sequence[int], direction: PlaquetteDirection) -> str:
     """Apply a pre-validated spin-S plaquette operation."""
     new_state = list(state) if isinstance(state, str) else state.copy()
 
@@ -102,12 +108,22 @@ def _compute_energy(bi: str, lx: int, ly: int, m: float, g: float, S: float) -> 
     return onsite_energy + link_energy
 
 
-def hopping_checker(bitstring: str, b_int: str, Lx: int, Ly: int, S: float, ev: float, m: float, g: float, pbc: bool = False):
+def hopping_checker(
+    bitstring: str,
+    b_int: str,
+    Lx: int,
+    Ly: int,
+    S: float,
+    ev: float,
+    m: float,
+    g: float,
+    pbc: bool = False,
+) -> list[HoppingMove]:
     """Find energy-conserving matter hopping moves available from a state."""
     surviving_hops = []
     max_m = 2 * S
 
-    def delta_energy(ms, msa, x, y, m, g):
+    def delta_energy(ms: Sequence[int], msa: Sequence[int], x: int, y: int, m: float, g: float) -> float:
         s1 = (-1) ** (x + y)
         s2 = (-1) ** (x + y + 1)
         if S == 1 / 2:
@@ -128,10 +144,10 @@ def hopping_checker(bitstring: str, b_int: str, Lx: int, Ly: int, S: float, ev: 
             - (ms[2] - 1) ** 2 * g**2
         )
 
-    def site_index(x, y):
+    def site_index(x: int, y: int) -> int:
         return x * Ly + y
 
-    def bit_indices(x, y):
+    def bit_indices(x: int, y: int) -> tuple[int, int, int]:
         base = 3 * site_index(x, y)
         return base, base + 1, base + 2
 
@@ -189,7 +205,7 @@ def hopping_checker(bitstring: str, b_int: str, Lx: int, Ly: int, S: float, ev: 
     return surviving_hops
 
 
-def apply_hopping_spinS_fast(state, indices, direction: str, S: float) -> str:
+def apply_hopping_spinS_fast(state: str | Sequence[str], indices: Sequence[int], direction: HoppingDirection, S: float) -> str:
     """Apply a pre-validated hopping operation."""
     new_state = list(state) if isinstance(state, str) else state.copy()
     m, r, u, tm, tl = indices
@@ -235,7 +251,7 @@ def generate_all_reachable_configs(
     ev: float = 1e-6,
     pbc: bool = False,
     progress: bool = False,
-):
+) -> set[tuple[str, int]]:
     """Generate all reachable configurations using breadth-first search."""
     clear_output = None
     if progress:

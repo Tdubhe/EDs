@@ -2,12 +2,16 @@
 
 from __future__ import annotations
 
+from typing import Any, Sequence
+
 import numpy as np
+from matplotlib.axes import Axes
 from matplotlib.collections import LineCollection
 from matplotlib.colors import Normalize
+from numpy.typing import ArrayLike, NDArray
 
 
-def _default_site_values(Lx, Ly):
+def _default_site_values(Lx: int, Ly: int) -> NDArray[np.float64]:
     site_val = np.zeros((Ly, Lx))
     for xx in range(Lx):
         for yy in range(Ly):
@@ -15,7 +19,22 @@ def _default_site_values(Lx, Ly):
     return site_val
 
 
-def plot_lattice_charge(ax, Lx, Ly, site_val, link_values_x, link_values_y, t, m, J, g, chi, pp, pe, s):
+def plot_lattice_charge(
+    ax: Axes,
+    Lx: int,
+    Ly: int,
+    site_val: ArrayLike,
+    link_values_x: ArrayLike,
+    link_values_y: ArrayLike,
+    t: float | str,
+    m: float,
+    J: float,
+    g: float,
+    chi: int | float | str,
+    pp: Sequence[Sequence[float]],
+    pe: Sequence[Sequence[float]],
+    s: float,
+) -> tuple[Any, LineCollection, LineCollection]:
     """Plot charge representation on an existing Matplotlib axis."""
     x, y = np.meshgrid(np.arange(Lx), np.arange(Ly))
     if s == 1 / 2:
@@ -67,7 +86,22 @@ def plot_lattice_charge(ax, Lx, Ly, site_val, link_values_x, link_values_y, t, m
     return site_scatter, lc_x, lc_y
 
 
-def plot_lattice_fermion(ax, Lx, Ly, site_val, link_values_x, link_values_y, t, m, J, g, chi, pp, pe, s):
+def plot_lattice_fermion(
+    ax: Axes,
+    Lx: int,
+    Ly: int,
+    site_val: ArrayLike,
+    link_values_x: ArrayLike,
+    link_values_y: ArrayLike,
+    t: float | str,
+    m: float,
+    J: float,
+    g: float,
+    chi: int | float | str,
+    pp: Sequence[Sequence[float]],
+    pe: Sequence[Sequence[float]],
+    s: float,
+) -> tuple[Any, LineCollection, LineCollection]:
     """Plot fermion representation on an existing Matplotlib axis."""
     x, y = np.meshgrid(np.arange(Lx), np.arange(Ly))
     site_norm = Normalize(vmin=0, vmax=1)

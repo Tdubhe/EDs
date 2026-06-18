@@ -1,6 +1,6 @@
 import numpy as np
 
-from U1_boson_fermion import converter_b2f, converter_f2s, inverse_converter_full
+from spectral_lgt import converter_b2f, converter_f2s, inverse_converter_full
 
 
 def test_spin_half_round_trip():
